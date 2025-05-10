@@ -115,9 +115,172 @@ function UserDetailsCard({ user, infoCards }: { user: User; infoCards: InfoCard[
   );
 }
 
-function PlanStatusCard({ planStatus }: { planStatus: PlanStatus }) {
+function PlanOptimisationSection() {
+  const optimisations = [
+    {
+      title: "Reduce Non-Essential Spending",
+      icon: "/pencil-edit-icon.png",
+      button: "Apply",
+      description: "Update Monthly Non-Essential Expenses from £5,000 to £3,500 read more",
+      value: "5,000",
+      valueLabel: "Cash Flow Change",
+      valueChange: "+£1,500/month",
+      valueChangeColor: "text-green-400",
+      infoLabel: "Savings Increase",
+      info: "Significant increase due to compounded returns over time.",
+      infoColor: "text-green-300",
+      valueBoxColor: "border-pink-400",
+      headerColor: "bg-[#2a2236] border-pink-400",
+      headerTextColor: "text-white",
+      iconBg: "bg-pink-500",
+    },
+    {
+      title: "Increase Pension Contributions",
+      icon: "/pencil-edit-icon.png",
+      button: "Apply",
+      description: "Update Net Annual Pension Contribution from £7,000 to £17,000 read more",
+      value: "7,000",
+      valueLabel: "Cash Flow Change",
+      valueChange: "Potentially negative in the short term due to reduced take-home pay, but highly positive in the long term.",
+      valueChangeColor: "text-red-400",
+      infoLabel: "",
+      info: "",
+      infoColor: "",
+      valueBoxColor: "border-pink-400",
+      headerColor: "bg-[#2a2236] border-pink-400",
+      headerTextColor: "text-white",
+      iconBg: "bg-pink-500",
+    },
+    {
+      title: "Reduce Non-Essential Spending",
+      icon: "/pencil-edit-icon.png",
+      button: "Apply",
+      description: "Update Monthly Non-Essential Expenses from £5,000 to £3,500 read more",
+      value: "5,000",
+      valueLabel: "Cash Flow Change",
+      valueChange: "+£1,500/month",
+      valueChangeColor: "text-green-400",
+      infoLabel: "Savings Increase",
+      info: "Significant increase due to compounded returns over time.",
+      infoColor: "text-green-300",
+      valueBoxColor: "border-pink-400",
+      headerColor: "bg-[#2a2236] border-pink-400",
+      headerTextColor: "text-white",
+      iconBg: "bg-pink-500",
+    },
+    {
+      title: "Increase Pension Contributions",
+      icon: "/pencil-edit-icon.png",
+      button: "Apply",
+      description: "Update Net Annual Pension Contribution from £7,000 to £17,000 read more",
+      value: "7,000",
+      valueLabel: "Cash Flow Change",
+      valueChange: "Potentially negative in the short term due to reduced take-home pay, but highly positive in the long term.",
+      valueChangeColor: "text-red-400",
+      infoLabel: "",
+      info: "",
+      infoColor: "",
+      valueBoxColor: "border-pink-400",
+      headerColor: "bg-[#2a2236] border-pink-400",
+      headerTextColor: "text-white",
+      iconBg: "bg-pink-500",
+    },
+    {
+      title: "Reduce Non-Essential Spending",
+      icon: "/pencil-edit-icon.png",
+      button: "Apply",
+      description: "Update Monthly Non-Essential Expenses from £5,000 to £3,500 read more",
+      value: "5,000",
+      valueLabel: "Cash Flow Change",
+      valueChange: "+£1,500/month",
+      valueChangeColor: "text-green-400",
+      infoLabel: "Savings Increase",
+      info: "Significant increase due to compounded returns over time.",
+      infoColor: "text-green-300",
+      valueBoxColor: "border-pink-400",
+      headerColor: "bg-[#2a2236] border-pink-400",
+      headerTextColor: "text-white",
+      iconBg: "bg-pink-500",
+    },
+    {
+      title: "Increase Pension Contributions",
+      icon: "/pencil-edit-icon.png",
+      button: "Apply",
+      description: "Update Net Annual Pension Contribution from £7,000 to £17,000 read more",
+      value: "7,000",
+      valueLabel: "Cash Flow Change",
+      valueChange: "Potentially negative in the short term due to reduced take-home pay, but highly positive in the long term.",
+      valueChangeColor: "text-red-400",
+      infoLabel: "",
+      info: "",
+      infoColor: "",
+      valueBoxColor: "border-pink-400",
+      headerColor: "bg-[#2a2236] border-pink-400",
+      headerTextColor: "text-white",
+      iconBg: "bg-pink-500",
+    },
+  ];
   return (
-    <div className="col-span-3 bg-[#310312] rounded-2xl p-6 flex flex-col items-center justify-center shadow-lg border border-[#2a2236] min-h-[180px]">
+    <div className="w-full">
+      <div className="font-semibold text-white text-xl mb-4">Plan Optimisation</div>
+      <div className="flex gap-4 overflow-x-auto pb-2">
+        {optimisations.map((opt, idx) => (
+          <OptimisationCard key={idx} {...opt} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function OptimisationCard({
+  title,
+  icon,
+  button,
+  description,
+  value,
+  valueLabel,
+  valueChange,
+  valueChangeColor,
+  infoLabel,
+  info,
+  infoColor,
+  valueBoxColor,
+  headerColor,
+  headerTextColor,
+  iconBg,
+}: any) {
+  return (
+    <div style={{backgroundColor: '#FFFFFF1F'}} className="min-w-[340px] max-w-[360px] rounded-2xl p-4 flex flex-col gap-3 shadow-lg border border-[#2a2236]">
+      <div className={`flex items-center justify-between rounded-xl px-3 py-2 mb-2 border ${headerColor}`}> 
+        <div className="flex items-center gap-2">
+          <div className={`w-7 h-7 flex items-center justify-center rounded-full ${iconBg}`}>
+            <Image src={icon} alt="icon" width={16} height={16} />
+          </div>
+          <span className={`font-semibold text-xs ${headerTextColor}`}>{title}</span>
+        </div>
+        <button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-1 rounded-lg text-xs shadow transition">{button}</button>
+      </div>
+      <div className="text-xs text-white/80 mb-2">{description}</div>
+      <div className="flex items-center gap-2 mb-2">
+        <div className={`border ${valueBoxColor} rounded-lg px-4 py-2 text-lg font-semibold text-white bg-transparent`}>{value}</div>
+        <span className={`text-sm ${valueChangeColor}`}>{valueChange}</span>
+      </div>
+      <div className="flex items-center gap-2 text-xs text-white/70">
+        <span className="font-semibold">{valueLabel}</span>
+      </div>
+      {info && (
+        <div className={`mt-1 text-xs font-semibold ${infoColor}`}>{info}</div>
+      )}
+    </div>
+  );
+}
+
+function PlanStatusCard({ planStatus }: { planStatus: PlanStatus }) {
+  if (!planStatus.onTrack) {
+    return <PlanOptimisationSection />;
+  }
+  return (
+    <div className="col-span-3 bg-[#18101c] rounded-2xl p-6 flex flex-col items-center justify-center shadow-lg border border-[#2a2236] min-h-[180px]">
       <div className="relative flex items-center justify-center mb-2" style={{ minHeight: 80 }}>
         <div
           className="absolute"
@@ -133,7 +296,7 @@ function PlanStatusCard({ planStatus }: { planStatus: PlanStatus }) {
             zIndex: 0,
           }}
         />
-        <Image src="/3d-icon-check-mark.png" alt="Plan on track" width={64} height={64} className="relative z-10" />
+        <Image src="/3d-icon-check-mark.png" alt="Plan on track" width={104} height={104} className="relative z-10" />
       </div>
       <div className="text-green-400 font-bold text-lg mb-1">Plan on track!</div>
       <div className="text-white text-sm text-center mb-1">
@@ -185,13 +348,20 @@ function ChartSection({ tab, setTab, chartData }: { tab: string; setTab: (tab: s
 
 export default function OverviewMainSection() {
   const [tab, setTab] = useState("portfolio");
+  const showPlanOptimisation = true; // Set to true to show Plan Optimisation section
 
   return (
     <div className="flex flex-col gap-6 w-full p-2 sm:p-3 md:p-4">
       {/* Top Section */}
       <div className="grid grid-cols-5 gap-4 md:gap-6">
         <UserDetailsCard user={user} infoCards={infoCards} />
-        <PlanStatusCard planStatus={planStatus} />
+        {showPlanOptimisation ? (
+    <div className="col-span-3 bg-[#310312] rounded-2xl p-6 flex flex-col gap-4 shadow-lg border border-[#2a2236]">
+            <div className="col-span-3"><PlanOptimisationSection /></div>
+          </div>
+        ) : (
+          <PlanStatusCard planStatus={{ ...planStatus, onTrack: true }} />
+        )}
       </div>
       <ChartSection tab={tab} setTab={setTab} chartData={chartData} />
     </div>
