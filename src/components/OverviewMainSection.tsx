@@ -41,32 +41,32 @@ const infoCards = [
   {
     label: "Current Age",
     value: `${user.currentAge} years`,
-    icon: <FaCalendarAlt className="text-white/80 text-xl" />,
+    icon: <Image src="/calendar-icon.png" alt="Calendar" width={24} height={24} />,
   },
   {
     label: "Target Retirement Age",
     value: `${user.retirementAge} years`,
-    icon: <FaBell className="text-white/80 text-xl" />,
+    icon: <Image src="/rocket-icon.png" alt="Rocket" width={24} height={24} />,
   },
   {
     label: "Monthly Surplus",
     value: `£${user.monthlySurplus.toLocaleString()}`,
-    icon: <FaPoundSign className="text-white/80 text-xl" />,
+    icon: <Image src="/pound-icon.png" alt="Pound" width={24} height={24} />,
   },
   {
     label: "Financial Independence",
     value: user.financialIndependence,
-    icon: <FaChartBar className="text-white/80 text-xl" />,
+    icon: <Image src="/bar-chart-icon.png" alt="Bar Chart" width={24} height={24} />,
   },
   {
     label: "Income During Retirement",
     value: `£${user.incomeDuringRetirement.toLocaleString()}`,
-    icon: <FaPoundSign className="text-white/80 text-xl" />,
+    icon: <Image src="/pound-icon.png" alt="Pound" width={24} height={24} />,
   },
   {
     label: "Current Savings",
     value: `£${user.currentSavings.toLocaleString()}`,
-    icon: <FaPiggyBank className="text-white/80 text-xl" />,
+    icon: <Image src="/pound-icon.png" alt="Pound" width={24} height={24} />,
   },
 ];
 
@@ -82,14 +82,17 @@ type ChartDatum = typeof chartData[number];
 
 function UserDetailsCard({ user, infoCards }: { user: User; infoCards: InfoCard[] }) {
   return (
-    <div className="col-span-2 bg-[#201624] rounded-2xl p-6 flex flex-col gap-4 shadow-lg border border-[#2a2236]">
+    <div className="col-span-2 bg-[#310312] rounded-2xl p-6 flex flex-col gap-4 shadow-lg border border-[#2a2236]">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <Image src={user.profilePic} alt="User" width={40} height={40} className="rounded-full border-2 border-pink-500" />
           <span className="text-base font-semibold text-white">{user.name}</span>
         </div>
-        <button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-5 py-2 rounded-lg text-sm flex items-center gap-2 shadow-md transition">
-          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="inline-block mr-1"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536M9 11l6 6M3 21h6v-6H3v6zm0 0l9-9 6 6" /></svg>
+        <button
+          className="text-white font-semibold px-5 py-2 rounded-lg text-sm flex items-center gap-2 shadow-md transition border-0"
+          style={{ background: 'linear-gradient(140deg, #ec4899 0%, #db2777 100%)' }}
+        >
+          <Image src="/pencil-edit-icon.png" alt="Pencil" width={18} height={18} className="inline-block mr-1" />
           Customize Financial Plan
         </button>
       </div>
@@ -97,13 +100,13 @@ function UserDetailsCard({ user, infoCards }: { user: User; infoCards: InfoCard[
         {infoCards.map((card: InfoCard, idx: number) => (
           <div
             key={idx}
-            className="bg-[#A0145A] rounded-2xl shadow-md flex flex-col justify-between"
-            style={{ width: '220px', height: '95px', padding: '14px 18px' }}
+            className="bg-[#62092B] rounded-2xl shadow-md flex flex-col justify-between"
+            style={{ width: '190px', height: '95px', padding: '14px 18px' }}
           >
             <div className="text-pink-100 mb-1" style={{ fontSize: '12px', fontWeight: 400 }}>{card.label}</div>
             <div className="flex flex-row items-center gap-2 mt-1">
-              <span className="text-pink-200 text-2xl flex items-center">{card.icon}</span>
-              <span className="text-white font-bold ml-2" style={{ fontSize: '24px' }}>{card.value}</span>
+              <span className="text-pink-200 text-2xl flex items-center" style={{ color: '#FF3F8A' }}>{card.icon}</span>
+              <span className="text-white font-bold ml-2" style={{ fontSize: '24px', fontWeight: 400 }}>{card.value}</span>
             </div>
           </div>
         ))}
@@ -114,8 +117,24 @@ function UserDetailsCard({ user, infoCards }: { user: User; infoCards: InfoCard[
 
 function PlanStatusCard({ planStatus }: { planStatus: PlanStatus }) {
   return (
-    <div className="col-span-3 bg-[#18101c] rounded-2xl p-6 flex flex-col items-center justify-center shadow-lg border border-[#2a2236] min-h-[180px]">
-      <Image src="/3d-icon-check-mark.png" alt="Plan on track" width={64} height={64} className="mb-2" />
+    <div className="col-span-3 bg-[#310312] rounded-2xl p-6 flex flex-col items-center justify-center shadow-lg border border-[#2a2236] min-h-[180px]">
+      <div className="relative flex items-center justify-center mb-2" style={{ minHeight: 80 }}>
+        <div
+          className="absolute"
+          style={{
+            width: 220,
+            height: 220,
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+            background: 'radial-gradient(circle, rgba(34,197,94,0.35) 0%, rgba(34,197,94,0.15) 60%, transparent 100%)',
+            filter: 'blur(24px)',
+            borderRadius: '50%',
+            zIndex: 0,
+          }}
+        />
+        <Image src="/3d-icon-check-mark.png" alt="Plan on track" width={64} height={64} className="relative z-10" />
+      </div>
       <div className="text-green-400 font-bold text-lg mb-1">Plan on track!</div>
       <div className="text-white text-sm text-center mb-1">
         You can retire at age <span className="font-bold text-green-400">{planStatus.retireAge}</span> with a portfolio of <span className="font-bold">{planStatus.portfolio}</span>, your estimated annual income will be <span className="font-bold">{planStatus.annualIncome}</span>.
