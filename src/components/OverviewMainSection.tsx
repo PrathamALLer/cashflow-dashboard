@@ -252,9 +252,18 @@ function OptimisationCard({
   headerTextColor,
   iconBg,
 }: any) {
+  const [stepperValue, setStepperValue] = useState(Number(value.replace(/,/g, '')));
+  const [descExpanded, setDescExpanded] = useState(false);
+  const maxDescLength = 60;
+  const descTruncated = description.length > maxDescLength && !descExpanded;
+  const descToShow = descTruncated ? description.slice(0, maxDescLength) + '...' : description;
+
+  const handleDecrement = () => setStepperValue((v: number) => Math.max(0, v - 1000));
+  const handleIncrement = () => setStepperValue((v: number) => v + 1000);
+
   return (
     <div style={{backgroundColor: '#FFFFFF1F'}} className="min-w-[520px] max-w-[540px] rounded-2xl p-4 flex flex-col gap-3 shadow-lg border border-[#2a2236]">
-      <div className="flex items-center justify-between gap-2 mb-2">
+      <div className="flex items-center justify-between gap-2 mb-1 min-h-[48px]">
         <div className="flex-1">
           <div
             className="flex items-center gap-2 rounded-xl px-3 py-2 border"
@@ -274,7 +283,7 @@ function OptimisationCard({
         <button
           className="ml-2 px-5 py-2 rounded-xl font-bold text-white text-base border"
           style={{
-            background: '#80153B',
+            background: 'linear-gradient(0deg, #80153B, #80153B), linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5))',
             borderColor: '#E81A5F',
             borderWidth: 2,
           }}
@@ -282,22 +291,68 @@ function OptimisationCard({
           {button}
         </button>
       </div>
-      <div className="text-base text-white/80 mb-2">{description}</div>
-      <div className="flex items-center gap-2 mb-2">
-        <div className={`border ${valueBoxColor} rounded-lg px-8 py-3 text-xl font-semibold text-white bg-transparent flex items-center gap-2`}>
-          <button className="text-pink-400 text-2xl font-bold">-</button>
-          {value}
-          <button className="text-pink-400 text-2xl font-bold">+</button>
+      <div className="text-base text-white/80 mb-1 min-h-[48px] flex items-center">
+        <span>
+          {descToShow}
+          {descTruncated && (
+            <button className="ml-1 text-pink-400 underline text-sm inline" onClick={() => setDescExpanded(true)}>
+              read more
+            </button>
+          )}
+          {descExpanded && description.length > maxDescLength && (
+            <button className="ml-1 text-pink-400 underline text-sm inline" onClick={() => setDescExpanded(false)}>
+              show less
+            </button>
+          )}
+        </span>
+      </div>
+      <div className="flex items-center gap-2 mb-1 min-h-[56px]">
+        <div
+          className="flex items-center justify-between w-full rounded-2xl border border-[#E81A5F] overflow-hidden"
+          style={{ minWidth: 180, maxWidth: 220, height: 48 }}
+        >
+          <button
+            onClick={handleDecrement}
+            className="flex items-center justify-center w-12 h-full border-none outline-none bg-transparent cursor-pointer group"
+            style={{ borderRight: '2px solid #E81A5F' }}
+          >
+            <span className="rounded-full border-2 border-[#E81A5F] w-8 h-8 flex items-center justify-center text-[1.25rem] text-[#E81A5F] group-hover:bg-[#E81A5F] group-hover:text-white transition">
+              –
+            </span>
+          </button>
+          <span className="flex-1 text-center text-white text-lg font-bold select-none">
+            {stepperValue.toLocaleString()}
+          </span>
+          <button
+            onClick={handleIncrement}
+            className="flex items-center justify-center w-12 h-full border-none outline-none bg-transparent cursor-pointer group"
+            style={{ borderLeft: '2px solid #E81A5F' }}
+          >
+            <span className="rounded-full border-2 border-[#E81A5F] w-8 h-8 flex items-center justify-center text-[1.25rem] text-[#E81A5F] group-hover:bg-[#E81A5F] group-hover:text-white transition">
+              +
+            </span>
+          </button>
         </div>
-        <span className={`text-lg font-bold ${valueChangeColor}`}>{valueChange}</span>
       </div>
-      <div className="flex items-center gap-2 text-base text-white/90 mb-1">
-        <Image src="/dollar-icon.png" alt="dollar" width={20} height={20} />
-        <span className="font-semibold">{valueLabel}</span>
+      {/* Fourth row: stacked rows for Cash Flow Change and Savings Increase */}
+      <div className="flex flex-col gap-3 min-h-[70px] mt-2">
+        {/* Cash Flow Change */}
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <Image src="/dollar-icon.png" alt="dollar" width={20} height={20} />
+            <span className="font-semibold text-base text-white">Cash Flow Change</span>
+          </div>
+          <div className={`text-base font-bold ${valueChangeColor}`}>{valueChange}</div>
+        </div>
+        {/* Savings Increase */}
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <Image src="/bar-chart-icon.png" alt="bar chart" width={20} height={20} />
+            <span className="font-semibold text-base text-white">Savings Increase</span>
+          </div>
+          <div className={`text-base font-bold ${infoColor}`}>{info}</div>
+        </div>
       </div>
-      {info && (
-        <div className={`mt-1 text-base font-bold ${infoColor}`}>{info}</div>
-      )}
     </div>
   );
 }
