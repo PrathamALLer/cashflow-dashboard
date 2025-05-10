@@ -223,7 +223,10 @@ function PlanOptimisationSection() {
   return (
     <div className="w-full">
       <div className="font-semibold text-white text-xl mb-4">Plan Optimisation</div>
-      <div className="flex gap-4 overflow-x-auto pb-2">
+      <div
+        className="flex gap-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-[#E81A5F] scrollbar-track-[#18101c] scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
+        style={{ scrollbarColor: '#E81A5F #18101c', scrollbarWidth: 'thin' }}
+      >
         {optimisations.map((opt, idx) => (
           <OptimisationCard key={idx} {...opt} />
         ))}
@@ -250,26 +253,50 @@ function OptimisationCard({
   iconBg,
 }: any) {
   return (
-    <div style={{backgroundColor: '#FFFFFF1F'}} className="min-w-[340px] max-w-[360px] rounded-2xl p-4 flex flex-col gap-3 shadow-lg border border-[#2a2236]">
-      <div className={`flex items-center justify-between rounded-xl px-3 py-2 mb-2 border ${headerColor}`}> 
-        <div className="flex items-center gap-2">
-          <div className={`w-7 h-7 flex items-center justify-center rounded-full ${iconBg}`}>
-            <Image src={icon} alt="icon" width={16} height={16} />
+    <div style={{backgroundColor: '#FFFFFF1F'}} className="min-w-[520px] max-w-[540px] rounded-2xl p-4 flex flex-col gap-3 shadow-lg border border-[#2a2236]">
+      <div className="flex items-center justify-between gap-2 mb-2">
+        <div className="flex-1">
+          <div
+            className="flex items-center gap-2 rounded-xl px-3 py-2 border"
+            style={{
+              background: '#FFFFFF1F',
+              borderImage: 'linear-gradient(90deg, #E81A5F 0%, #80153B 100%) 1',
+              borderWidth: 2,
+              borderStyle: 'solid',
+            }}
+          >
+            <div className="w-7 h-7 flex items-center justify-center rounded-full bg-pink-500">
+              <Image src={icon} alt="icon" width={16} height={16} />
+            </div>
+            <span className="font-semibold text-base text-white">{title}</span>
           </div>
-          <span className={`font-semibold text-xs ${headerTextColor}`}>{title}</span>
         </div>
-        <button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-1 rounded-lg text-xs shadow transition">{button}</button>
+        <button
+          className="ml-2 px-5 py-2 rounded-xl font-bold text-white text-base border"
+          style={{
+            background: '#80153B',
+            borderColor: '#E81A5F',
+            borderWidth: 2,
+          }}
+        >
+          {button}
+        </button>
       </div>
-      <div className="text-xs text-white/80 mb-2">{description}</div>
+      <div className="text-base text-white/80 mb-2">{description}</div>
       <div className="flex items-center gap-2 mb-2">
-        <div className={`border ${valueBoxColor} rounded-lg px-4 py-2 text-lg font-semibold text-white bg-transparent`}>{value}</div>
-        <span className={`text-sm ${valueChangeColor}`}>{valueChange}</span>
+        <div className={`border ${valueBoxColor} rounded-lg px-8 py-3 text-xl font-semibold text-white bg-transparent flex items-center gap-2`}>
+          <button className="text-pink-400 text-2xl font-bold">-</button>
+          {value}
+          <button className="text-pink-400 text-2xl font-bold">+</button>
+        </div>
+        <span className={`text-lg font-bold ${valueChangeColor}`}>{valueChange}</span>
       </div>
-      <div className="flex items-center gap-2 text-xs text-white/70">
+      <div className="flex items-center gap-2 text-base text-white/90 mb-1">
+        <Image src="/dollar-icon.png" alt="dollar" width={20} height={20} />
         <span className="font-semibold">{valueLabel}</span>
       </div>
       {info && (
-        <div className={`mt-1 text-xs font-semibold ${infoColor}`}>{info}</div>
+        <div className={`mt-1 text-base font-bold ${infoColor}`}>{info}</div>
       )}
     </div>
   );
