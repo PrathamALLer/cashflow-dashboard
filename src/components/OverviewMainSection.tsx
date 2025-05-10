@@ -269,9 +269,10 @@ function OptimisationCard({
             className="flex items-center gap-2 rounded-xl px-3 py-2 border"
             style={{
               background: '#FFFFFF1F',
-              borderImage: 'linear-gradient(90deg, #E81A5F 0%, #80153B 100%) 1',
-              borderWidth: 2,
-              borderStyle: 'solid',
+              // border: '2px solid linear-gradient(90deg, #E81A5F 0%, #80153B 100%)',
+              border: '2px solid #E81A5F',
+              borderRadius: '0.75rem',
+              overflow: 'hidden',
             }}
           >
             <div className="w-7 h-7 flex items-center justify-center rounded-full bg-pink-500">
