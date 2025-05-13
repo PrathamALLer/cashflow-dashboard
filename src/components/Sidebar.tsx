@@ -3,8 +3,8 @@ import { FiHome, FiUsers, FiLayers, FiSettings, FiChevronLeft, FiChevronRight, F
 import Image from "next/image";
 
 const navItems = [
-  { label: "Overview", icon: <FiHome size={22} />, active: false },
-  { label: "All Clients", icon: <FiUsers size={22} />, active: true },
+  { label: "Overview", icon: <FiHome size={22} />, active: true },
+  { label: "All Clients", icon: <FiUsers size={22} />, active: false },
   { label: "All Plans", icon: <FiLayers size={22} />, active: false },
 ];
 
@@ -93,6 +93,8 @@ export default function Sidebar({ onToggle }: SidebarProps) {
           <FiSettings size={22} />
           {!collapsed && <span>Settings</span>}
         </a>
+        
+        {/* User profile and logout */}
         <div className={`border-t border-white/10 pt-4 flex items-center gap-3 ${collapsed ? "flex-col border-none pt-0" : ""}`}>
           <Image
             src="https://randomuser.me/api/portraits/women/44.jpg"
@@ -116,4 +118,4 @@ export default function Sidebar({ onToggle }: SidebarProps) {
       </div>
     </aside>
   );
-} 
+}
