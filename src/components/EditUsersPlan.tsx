@@ -405,7 +405,7 @@ const EditUsersPlan = () => {
         </div>
         
         {/* Risk Profile */}
-        <div className="bg-[#150107] rounded-2xl p-5 border border-[#404968]">
+        <div className="bg-[#150107] rounded-2xl p-5 border border-[#404968] flex flex-col h-full">
           <h3 className="text-white font-medium mb-4">Risk Profile</h3>
           
           <div className="mb-5">
@@ -439,40 +439,30 @@ const EditUsersPlan = () => {
             </div>
           </div>
           
-          <div className="flex justify-center">
-            <div className="relative">
+          <div className="mt-auto flex justify-center">
+            <div className="relative w-[95%]">
               <Image
-                src="/risk-profile-image.svg"
+                src="/risk-profile-img.png"
                 alt="Risk Profile"
-                width={200}
-                height={120}
+                width={500}
+                height={281}
+                className="w-full h-auto"
               />
               
-              <div className="absolute top-[40%] left-[50%] transform -translate-x-1/2 -translate-y-1/2">
-                <div className="bg-[#191919] w-8 h-8 rounded-full flex items-center justify-center shadow-lg">
-                  <div 
-                    className="bg-[#9f7b42] w-[3px] h-8 rounded-full absolute transform origin-bottom"
-                    style={{ 
-                      transform: `rotate(${selectedRiskProfile === 1 ? '0deg' : 
-                        selectedRiskProfile === 2 ? '22.5deg' : 
-                        selectedRiskProfile === 3 ? '45deg' : 
-                        selectedRiskProfile === 4 ? '67.5deg' : '90deg'
-                      })` 
-                    }}
-                  ></div>
-                  <div className="bg-white rounded-full w-2 h-2"></div>
+              <div 
+                className="absolute"
+                style={{ 
+                  top: '40%',
+                  left: `${(selectedRiskProfile - 1) * 25}%`,
+                  transform: 'translate(-50%, -50%)',
+                  transition: 'left 0.3s ease-in-out'
+                }}
+              >
+                <div className="bg-white w-4 h-4 rounded-full flex items-center justify-center shadow-lg">
+                  <div className="bg-[#FF0060] w-2 h-2 rounded-full"></div>
                 </div>
               </div>
             </div>
-          </div>
-          
-          <div className="mt-4">
-            <h4 className="text-[#FF0060] text-sm font-medium text-center">
-              {riskProfiles.find(p => p.id === selectedRiskProfile)?.name}
-            </h4>
-            <p className="text-gray-400 text-xs text-center mt-1">
-              {riskProfiles.find(p => p.id === selectedRiskProfile)?.description}
-            </p>
           </div>
         </div>
       </div>

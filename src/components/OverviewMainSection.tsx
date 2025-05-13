@@ -1,6 +1,18 @@
 import Image from "next/image";
 import { useState } from "react";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  Tooltip, 
+  ResponsiveContainer, 
+  Legend, 
+  AreaChart, 
+  Area, 
+  CartesianGrid,
+  ReferenceLine
+} from "recharts";
 import { FaCalendarAlt, FaBell, FaPoundSign, FaChartBar, FaPiggyBank } from "react-icons/fa";
 import type { JSX as ReactJSX } from 'react';
 import CollapsibleSection from './CollapsibleSection';
@@ -26,17 +38,17 @@ const planStatus = {
 };
 
 const chartData = [
-  { age: 25, Total: 40, ISA: 30, Pension: 20, GIA: 10 },
-  { age: 30, Total: 45, ISA: 32, Pension: 22, GIA: 12 },
-  { age: 35, Total: 50, ISA: 35, Pension: 25, GIA: 15 },
-  { age: 40, Total: 55, ISA: 38, Pension: 28, GIA: 18 },
-  { age: 45, Total: 60, ISA: 40, Pension: 30, GIA: 20 },
-  { age: 50, Total: 70, ISA: 50, Pension: 40, GIA: 25 },
-  { age: 55, Total: 80, ISA: 60, Pension: 50, GIA: 30 },
-  { age: 60, Total: 90, ISA: 70, Pension: 60, GIA: 35 },
-  { age: 65, Total: 100, ISA: 80, Pension: 70, GIA: 40 },
-  { age: 70, Total: 110, ISA: 90, Pension: 80, GIA: 45 },
-  { age: 75, Total: 120, ISA: 100, Pension: 90, GIA: 50 },
+  { age: 25, Total: 46250, ISA: 46250, Pension: 0, GIA: 0 },
+  { age: 30, Total: 150000, ISA: 80000, Pension: 50000, GIA: 20000 },
+  { age: 35, Total: 300000, ISA: 140000, Pension: 130000, GIA: 30000 },
+  { age: 40, Total: 500000, ISA: 200000, Pension: 250000, GIA: 50000 },
+  { age: 45, Total: 800000, ISA: 280000, Pension: 460000, GIA: 60000 },
+  { age: 50, Total: 1200000, ISA: 380000, Pension: 720000, GIA: 100000 },
+  { age: 55, Total: 1600000, ISA: 480000, Pension: 1000000, GIA: 120000 },
+  { age: 60, Total: 2200000, ISA: 580000, Pension: 1500000, GIA: 120000 },
+  { age: 65, Total: 2800000, ISA: 680000, Pension: 2000000, GIA: 120000 },
+  { age: 70, Total: 3200000, ISA: 780000, Pension: 2300000, GIA: 120000 },
+  { age: 75, Total: 3600000, ISA: 880000, Pension: 2600000, GIA: 120000 },
 ];
 
 const infoCards = [
@@ -496,36 +508,163 @@ function PlanStatusCard({ planStatus }: { planStatus: PlanStatus }) {
   );
 }
 
+// Custom tooltip component for the chart
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    // Map series names to their colors
+    const colorMap: Record<string, string> = {
+      Total: "#1E7A33",
+      ISA: "#53AE98",
+      Pension: "#9E71A2",
+      GIA: "#BFDB80"
+    };
+    
+    return (
+      <div className="bg-[#150107] p-4 rounded-lg border border-[#404968] shadow-lg">
+        <p className="text-white font-medium mb-2">Age {label}</p>
+        {payload.map((entry: any, index: number) => (
+          <div key={`tooltip-${index}`} className="flex justify-between items-center mb-1">
+            <div className="flex items-center">
+              <div 
+                className="w-3 h-3 rounded-full mr-2" 
+                style={{ backgroundColor: colorMap[entry.name] || entry.color }}
+              ></div>
+              <span className="text-white text-sm">{entry.name}</span>
+            </div>
+            <span className="text-white text-sm font-medium ml-4">
+              £{Number(entry.value).toLocaleString()}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
 function ChartSection({ tab, setTab, chartData }: { tab: string; setTab: (tab: string) => void; chartData: ChartDatum[] }) {
   return (
-    <div className="bg-[#18101c] rounded-2xl p-6 shadow-lg border border-[#2a2236] flex flex-col gap-4">
-      <div className="flex gap-2 mb-4">
-        <button
-          className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${tab === "portfolio" ? "bg-pink-500 text-white" : "bg-[#2a2236] text-gray-300 hover:bg-pink-900/30"}`}
-          onClick={() => setTab("portfolio")}
-        >
-          Portfolio Growth
-        </button>
-        <button
-          className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${tab === "moneyflow" ? "bg-pink-500 text-white" : "bg-[#2a2236] text-gray-300 hover:bg-pink-900/30"}`}
-          onClick={() => setTab("moneyflow")}
-        >
-          Money Flow
-        </button>
+    <div className="bg-[#150107] rounded-2xl p-6 shadow-lg border border-[#404968] flex flex-col gap-4">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex gap-2">
+          <button
+            className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${tab === "portfolio" ? "bg-[#FF0060] text-white" : "bg-[#2a2236] text-gray-300 hover:bg-pink-900/30"}`}
+            onClick={() => setTab("portfolio")}
+          >
+            Portfolio Growth
+          </button>
+          <button
+            className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${tab === "moneyflow" ? "bg-[#FF0060] text-white" : "bg-[#2a2236] text-gray-300 hover:bg-pink-900/30"}`}
+            onClick={() => setTab("moneyflow")}
+          >
+            Money Flow
+          </button>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center">
+            <div className="w-3 h-3 rounded-full bg-[#1E7A33] mr-2"></div>
+            <span className="text-white text-sm">Total</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-3 h-3 rounded-full bg-[#53AE98] mr-2"></div>
+            <span className="text-white text-sm">ISA</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-3 h-3 rounded-full bg-[#9E71A2] mr-2"></div>
+            <span className="text-white text-sm">Pension</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-3 h-3 rounded-full bg-[#BFDB80] mr-2"></div>
+            <span className="text-white text-sm">GIA</span>
+          </div>
+        </div>
       </div>
       {tab === "portfolio" ? (
-        <ResponsiveContainer width="100%" height={320}>
-          <LineChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-            <XAxis dataKey="age" stroke="#fff" tick={{ fontSize: 12 }} />
-            <YAxis stroke="#fff" tick={{ fontSize: 12 }} />
-            <Tooltip contentStyle={{ background: '#2a2236', border: 'none', color: '#fff' }} labelStyle={{ color: '#fff' }} />
-            <Legend wrapperStyle={{ color: '#fff' }} />
-            <Line type="monotone" dataKey="Total" stroke="#f472b6" strokeWidth={3} dot={false} />
-            <Line type="monotone" dataKey="ISA" stroke="#818cf8" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="Pension" stroke="#34d399" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="GIA" stroke="#fbbf24" strokeWidth={2} dot={false} />
-          </LineChart>
-        </ResponsiveContainer>
+        <div className="relative">
+          <div className="flex items-center justify-end mb-4">
+            <div className="flex items-center">
+              <span className="text-white text-sm mr-2">45</span>
+              <div className="w-4 h-4 rounded-full bg-white flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-[#1E7A33]"></div>
+              </div>
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={320}>
+            <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#1E7A33" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#1E7A33" stopOpacity={0}/>
+                </linearGradient>
+                <linearGradient id="colorISA" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#53AE98" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#53AE98" stopOpacity={0}/>
+                </linearGradient>
+                <linearGradient id="colorPension" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#9E71A2" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#9E71A2" stopOpacity={0}/>
+                </linearGradient>
+                <linearGradient id="colorGIA" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#BFDB80" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#BFDB80" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <XAxis 
+                dataKey="age" 
+                stroke="#404968" 
+                tick={{ fill: '#fff', fontSize: 12 }}
+                axisLine={{ stroke: '#404968' }}
+                tickLine={{ stroke: '#404968' }}
+              />
+              <YAxis 
+                stroke="#404968" 
+                tick={{ fill: '#fff', fontSize: 12 }}
+                tickFormatter={(value) => `£${(value / 1000000).toFixed(1)}M`}
+                axisLine={{ stroke: '#404968' }}
+                tickLine={{ stroke: '#404968' }}
+              />
+              <CartesianGrid stroke="#404968" strokeDasharray="3 3" vertical={false} />
+              <Tooltip content={<CustomTooltip />} />
+              <ReferenceLine x={45} stroke="#fff" strokeWidth={1} />
+              <Area 
+                type="monotone" 
+                dataKey="Total" 
+                stroke="#1E7A33" 
+                strokeWidth={3} 
+                fillOpacity={1}
+                fill="url(#colorTotal)" 
+                activeDot={{ r: 8, fill: '#1E7A33', stroke: '#fff', strokeWidth: 2 }}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="ISA" 
+                stroke="#53AE98" 
+                strokeWidth={2} 
+                fillOpacity={1}
+                fill="url(#colorISA)" 
+                activeDot={{ r: 6, fill: '#53AE98', stroke: '#fff', strokeWidth: 2 }}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="Pension" 
+                stroke="#9E71A2" 
+                strokeWidth={2} 
+                fillOpacity={1}
+                fill="url(#colorPension)" 
+                activeDot={{ r: 6, fill: '#9E71A2', stroke: '#fff', strokeWidth: 2 }}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="GIA" 
+                stroke="#BFDB80" 
+                strokeWidth={2} 
+                fillOpacity={1}
+                fill="url(#colorGIA)" 
+                activeDot={{ r: 6, fill: '#BFDB80', stroke: '#fff', strokeWidth: 2 }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
       ) : (
         <div className="text-white text-lg font-semibold text-center py-20">Money Flow Graph (Coming Soon)</div>
       )}
