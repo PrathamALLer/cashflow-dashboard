@@ -3,6 +3,8 @@ import { useState } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { FaCalendarAlt, FaBell, FaPoundSign, FaChartBar, FaPiggyBank } from "react-icons/fa";
 import type { JSX as ReactJSX } from 'react';
+import CollapsibleSection from './CollapsibleSection';
+import FinancialDataTable from './FinancialDataTable';
 
 const user = {
   name: "Jhon Doe",
@@ -79,6 +81,108 @@ type InfoCard = {
 type User = typeof user;
 type PlanStatus = typeof planStatus;
 type ChartDatum = typeof chartData[number];
+
+// Add this mock data for the financial table
+const mockFinancialData = [
+  {
+    age: 25,
+    starting_value: 72000,
+    pension_starting_value: 40000,
+    isa_starting_value: 20000,
+    gia_starting_value: 12000,
+    total_money_out: 0,
+    isa_money_out: 0,
+    pension_money_out: 0,
+    gia_money_out: 0,
+    general_growth: 3600,
+    pension_confirmed_money_in: 12000,
+    total_accumulation_money_in: 24000,
+    isa_contribution: 8000,
+    isa_ending_value: 28000,
+    pension_money_in: 12000,
+    pension_ending_value: 52000,
+    gia_contribution: 4000,
+    gia_ending_value: 16000,
+    decumulation_achieved_successfully: true,
+    total_ending_value: 96000,
+  },
+  {
+    age: 25,
+    starting_value: 72000,
+    pension_starting_value: 40000,
+    isa_starting_value: 20000,
+    gia_starting_value: 12000,
+    total_money_out: 0,
+    isa_money_out: 0,
+    pension_money_out: 0,
+    gia_money_out: 0,
+    general_growth: 3600,
+    pension_confirmed_money_in: 12000,
+    total_accumulation_money_in: 24000,
+    isa_contribution: 8000,
+    isa_ending_value: 28000,
+    pension_money_in: 12000,
+    pension_ending_value: 52000,
+    gia_contribution: 4000,
+    gia_ending_value: 16000,
+    decumulation_achieved_successfully: true,
+    total_ending_value: 96000,
+  },
+  {
+    age: 25,
+    starting_value: 72000,
+    pension_starting_value: 40000,
+    isa_starting_value: 20000,
+    gia_starting_value: 12000,
+    total_money_out: 0,
+    isa_money_out: 0,
+    pension_money_out: 0,
+    gia_money_out: 0,
+    general_growth: 3600,
+    pension_confirmed_money_in: 12000,
+    total_accumulation_money_in: 24000,
+    isa_contribution: 8000,
+    isa_ending_value: 28000,
+    pension_money_in: 12000,
+    pension_ending_value: 52000,
+    gia_contribution: 4000,
+    gia_ending_value: 16000,
+    decumulation_achieved_successfully: true,
+    total_ending_value: 96000,
+  },
+  {
+    age: 25,
+    starting_value: 72000,
+    pension_starting_value: 40000,
+    isa_starting_value: 20000,
+    gia_starting_value: 12000,
+    total_money_out: 0,
+    isa_money_out: 0,
+    pension_money_out: 0,
+    gia_money_out: 0,
+    general_growth: 3600,
+    pension_confirmed_money_in: 12000,
+    total_accumulation_money_in: 24000,
+    isa_contribution: 8000,
+    isa_ending_value: 28000,
+    pension_money_in: 12000,
+    pension_ending_value: 52000,
+    gia_contribution: 4000,
+    gia_ending_value: 16000,
+    decumulation_achieved_successfully: true,
+    total_ending_value: 96000,
+  },
+  // Add more mock data as needed
+];
+
+const defaultVisibleColumns = [
+  'age',
+  'starting_value',
+  'total_money_out',
+  'total_accumulation_money_in',
+  'total_ending_value',
+  'decumulation_achieved_successfully'
+];
 
 function UserDetailsCard({ user, infoCards }: { user: User; infoCards: InfoCard[] }) {
   return (
@@ -439,7 +543,7 @@ export default function OverviewMainSection() {
       <div className="grid grid-cols-5 gap-4 md:gap-6">
         <UserDetailsCard user={user} infoCards={infoCards} />
         {showPlanOptimisation ? (
-    <div className="col-span-3 bg-[#310312] rounded-2xl p-6 flex flex-col gap-4 shadow-lg border border-[#2a2236]">
+          <div className="col-span-3 bg-[#310312] rounded-2xl p-6 flex flex-col gap-4 shadow-lg border border-[#2a2236]">
             <div className="col-span-3"><PlanOptimisationSection /></div>
           </div>
         ) : (
@@ -447,6 +551,14 @@ export default function OverviewMainSection() {
         )}
       </div>
       <ChartSection tab={tab} setTab={setTab} chartData={chartData} />
+      
+      {/* Financial Data Table Section */}
+      <CollapsibleSection title="Financial Data Details">
+        <FinancialDataTable 
+          data={mockFinancialData} 
+          visibleColumns={defaultVisibleColumns} 
+        />
+      </CollapsibleSection>
     </div>
   );
 } 
