@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiHome, FiUsers, FiLayers, FiSettings, FiChevronLeft, FiChevronRight, FiLogOut } from "react-icons/fi";
 import Image from "next/image";
 
@@ -8,8 +8,23 @@ const navItems = [
   { label: "All Plans", icon: <FiLayers size={22} />, active: false },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  onToggle?: (collapsed: boolean) => void;
+}
+
+export default function Sidebar({ onToggle }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
+
+  // Notify parent component when collapsed state changes
+  useEffect(() => {
+    if (onToggle) {
+      onToggle(collapsed);
+    }
+  }, [collapsed, onToggle]);
+
+  const toggleCollapsed = () => {
+    setCollapsed(prev => !prev);
+  };
 
   return (
     <aside
@@ -34,7 +49,7 @@ export default function Sidebar() {
           {!collapsed ? (
             <button
               className="text-gray-400 hover:text-white transition ml-2"
-              onClick={() => setCollapsed((c) => !c)}
+              onClick={toggleCollapsed}
               aria-label="Toggle sidebar"
             >
               <FiChevronLeft size={22} />
@@ -43,7 +58,7 @@ export default function Sidebar() {
           {collapsed ? (
             <button
               className="text-gray-400 hover:text-white transition absolute top-1/2 right-[-18px] -translate-y-1/2 bg-[#111322] rounded-full shadow-lg border border-white/10 z-30 p-1"
-              onClick={() => setCollapsed((c) => !c)}
+              onClick={toggleCollapsed}
               aria-label="Expand sidebar"
               style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }}
             >
