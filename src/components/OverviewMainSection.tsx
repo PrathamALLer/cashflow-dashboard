@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   LineChart, 
   Line, 
@@ -17,6 +17,7 @@ import { FaCalendarAlt, FaBell, FaPoundSign, FaChartBar, FaPiggyBank } from "rea
 import type { JSX as ReactJSX } from 'react';
 import CollapsibleSection from './CollapsibleSection';
 import FinancialDataTable from './FinancialDataTable';
+import { fetchUserDetails } from "../services/userApis";
 
 const user = {
   name: "Jhon Doe",
@@ -676,6 +677,29 @@ function ChartSection({ tab, setTab, chartData }: { tab: string; setTab: (tab: s
 }
 
 export default function OverviewMainSection() {
+  // Add state to store user data from API
+  const [userData, setUserData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  
+  // Fetch user details when component mounts
+  useEffect(() => {
+    const getUserDetails = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchUserDetails();
+        console.log("Fetched user details:", data);
+        setUserData(data);
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    getUserDetails();
+  }, []);
+  
+  // Original component code
   const [tab, setTab] = useState("portfolio");
   const showPlanOptimisation = true; // Set to true to show Plan Optimisation section
 
