@@ -20,7 +20,7 @@ export default function Home() {
       <Sidebar />
       <div className="flex-1 ml-20 sm:ml-64 transition-all duration-300 bg-[#10101a] min-h-screen">
         <OverviewMainSection />
-        <div className="px-8 pb-8">
+        <div className="px-4 pb-8">
           <EditUsersPlan />
         </div>
       </div>

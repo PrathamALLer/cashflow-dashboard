@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 
 type CapitalEventGoal = {
   id: number;
@@ -85,30 +85,37 @@ const EditUsersPlan = () => {
   
   const [isInitialized, setIsInitialized] = useState(false);
 
+  // Debounce timer ref
+  const scrollTimerRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Function to center the selected age
+  const centerSelectedAge = useCallback(() => {
+    if (!scrollContainerRef.current) return;
+    
+    const container = scrollContainerRef.current;
+    const selectedElement = container.querySelector(`[data-age="${selectedAge}"]`);
+    
+    if (selectedElement) {
+      const containerHeight = container.clientHeight;
+      const selectedElementTop = (selectedElement as HTMLElement).offsetTop;
+      const selectedElementHeight = (selectedElement as HTMLElement).clientHeight;
+      
+      // Calculate the scroll position to center the selected element
+      const scrollTop = selectedElementTop - (containerHeight / 2) + (selectedElementHeight / 2);
+      
+      // Apply smooth scroll
+      container.scrollTo({
+        top: scrollTop,
+        behavior: 'smooth' 
+      });
+    }
+  }, [selectedAge]);
+
   // Effect to center selected age when it changes
   useEffect(() => {
     if (!isInitialized) return;
-    
-    if (scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const selectedElement = container.querySelector(`[data-age="${selectedAge}"]`);
-      
-      if (selectedElement) {
-        const containerHeight = container.clientHeight;
-        const selectedElementTop = (selectedElement as HTMLElement).offsetTop;
-        const selectedElementHeight = (selectedElement as HTMLElement).clientHeight;
-        
-        // Calculate the scroll position to center the selected element
-        const scrollTop = selectedElementTop - (containerHeight / 2) + (selectedElementHeight / 2);
-        
-        // Apply smooth scroll after initial render
-        container.scrollTo({
-          top: scrollTop,
-          behavior: 'smooth' 
-        });
-      }
-    }
-  }, [selectedAge, isInitialized]);
+    centerSelectedAge();
+  }, [selectedAge, isInitialized, centerSelectedAge]);
 
   // Initial scroll to center the default selected age
   useEffect(() => {
@@ -133,6 +140,60 @@ const EditUsersPlan = () => {
     }, 100); // Small delay to ensure DOM is ready
     
     return () => clearTimeout(timer);
+  }, []);
+
+  // Handle scroll events to update selected age when scrolling
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+    
+    const container = scrollContainerRef.current;
+    const containerMiddle = container.scrollTop + (container.clientHeight / 2);
+    
+    // Find the element closest to the middle of the container
+    let closestDistance = Infinity;
+    let newSelectedAge = selectedAge;
+    
+    Array.from(container.querySelectorAll('[data-age]')).forEach((element) => {
+      const el = element as HTMLElement;
+      const elementTop = el.offsetTop;
+      const elementHeight = el.clientHeight;
+      const elementMiddle = elementTop + (elementHeight / 2);
+      const distance = Math.abs(containerMiddle - elementMiddle);
+      
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        const ageAttr = el.getAttribute('data-age');
+        if (ageAttr) {
+          const age = parseInt(ageAttr, 10);
+          if (!isNaN(age)) {
+            newSelectedAge = age;
+          }
+        }
+      }
+    });
+    
+    if (newSelectedAge !== selectedAge) {
+      setSelectedAge(newSelectedAge);
+    }
+    
+    // Clear any existing timeout
+    if (scrollTimerRef.current) {
+      clearTimeout(scrollTimerRef.current);
+    }
+    
+    // Set a new timeout to center the selected age after scrolling stops
+    scrollTimerRef.current = setTimeout(() => {
+      centerSelectedAge();
+    }, 150);
+  };
+  
+  // Clean up the timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (scrollTimerRef.current) {
+        clearTimeout(scrollTimerRef.current);
+      }
+    };
   }, []);
 
   return (
@@ -303,11 +364,13 @@ const EditUsersPlan = () => {
             {/* Scrollable container */}
             <div 
               ref={scrollContainerRef}
-              className="w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar px-8"
+              className="w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar px-8 snap-y snap-mandatory"
               style={{ 
                 scrollPaddingTop: '100px',
-                scrollPaddingBottom: '100px'
+                scrollPaddingBottom: '100px',
+                scrollBehavior: 'smooth'
               }}
+              onScroll={handleScroll}
             >
               {/* Extra padding at top and bottom to allow scrolling to first and last items */}
               <div className="h-[120px]"></div>
@@ -316,7 +379,7 @@ const EditUsersPlan = () => {
                 <div 
                   key={age} 
                   data-age={age}
-                  className={`text-center cursor-pointer transition-all duration-200 h-14 flex items-center justify-center ${
+                  className={`text-center cursor-pointer transition-all duration-200 h-14 flex items-center justify-center snap-center ${
                     age === selectedAge 
                       ? "text-[#E81A5F] text-4xl font-bold h-16 z-20 relative" 
                       : age >= selectedAge - 2 && age <= selectedAge + 2
