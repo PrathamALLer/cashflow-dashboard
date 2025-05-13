@@ -17,7 +17,7 @@ export default function Sidebar() {
     >
       <div>
         {/* Logo and toggle */}
-        <div className="flex items-center justify-between px-4 py-6 relative">
+        <div className={`flex items-center justify-between ${collapsed ? 'px-3' : 'px-6'} py-6 relative`}>
           <div className={`flex items-center ${collapsed ? 'justify-center w-full' : 'gap-2'}`} style={collapsed ? {width: '100%'} : {}}>
             <div className={collapsed ? 'w-[90%] flex justify-center' : ''}>
               <Image
@@ -52,7 +52,7 @@ export default function Sidebar() {
           ) : null}
         </div>
         {/* Navigation */}
-        <nav className="mt-8 flex flex-col gap-1">
+        <nav className={`mt-8 flex flex-col gap-1 ${collapsed ? '' : 'px-3'}`}>
           {navItems.map((item) => (
             <a
               key={item.label}
@@ -69,7 +69,7 @@ export default function Sidebar() {
           ))}
         </nav>
       </div>
-      <div className="flex flex-col gap-4 mb-6 px-2">
+      <div className={`flex flex-col gap-4 mb-6 ${collapsed ? 'px-2' : 'px-5'}`}>
         {/* Settings */}
         <a
           href="#"
